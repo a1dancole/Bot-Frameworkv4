@@ -21,6 +21,7 @@ namespace WhoIsWho.Dialogs
             _luisRecognizer = luisRecognizer;
 
             AddDialog(new TextPrompt(nameof(TextPrompt)));
+            AddDialog(new ChoicePrompt(nameof(ChoicePrompt)));
             AddDialog(applicationDialog);
             AddDialog(teamMemberDialog);
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
@@ -36,11 +37,17 @@ namespace WhoIsWho.Dialogs
             CancellationToken cancellationToken)
         {
             var messageText = stepContext.Options?.ToString() ??
-                              "What can I help you with today?\nSay something like \"I want to know what team someone works in? Or, I want to know which team to speak to regarding an application?\"";
+                              "What can I help you with today?";
 
             var promptMessage = MessageFactory.Text(messageText, messageText, InputHints.ExpectingInput);
 
-            return await stepContext.PromptAsync(nameof(TextPrompt), new PromptOptions {Prompt = promptMessage},
+            var choices = new List<Choice>
+            {
+                new Choice("Find out which team someone works in"),
+                new Choice("Find out which team supports an application")
+            };
+
+            return await stepContext.PromptAsync(nameof(ChoicePrompt), new PromptOptions { Choices = choices, Style = ListStyle.HeroCard, Prompt = promptMessage },
                 cancellationToken);
         }
 

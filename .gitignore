@@ -3,3 +3,5 @@
 obj/**
 bin/**
 runtimes/**
+.vs/WhoIsWho/v16/Server/sqlite3/storage.ide-wal
+.vs/WhoIsWho/v16/Server/sqlite3/storage.ide-shm

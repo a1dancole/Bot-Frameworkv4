@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using WhoIsWho.Adapters;
 using WhoIsWho.Bots;
 using WhoIsWho.Dialogs;
+using WhoIsWho.Helpers;
 using WhoIsWho.Recognizers;
 
 namespace WhoIsWho
@@ -32,7 +33,9 @@ namespace WhoIsWho
             services.AddSingleton<LuisRecognizerImpl>();
             services.AddSingleton<ApplicationDialog>();
             services.AddSingleton<TeamMemberDialog>();
+            services.AddSingleton<BankHolidayDialog>();
             services.AddSingleton<MainDialog>();
+            services.AddSingleton<BankHolidayCalculator>();
             services.AddTransient<IBot, DialogBot<MainDialog>>();
         }
 

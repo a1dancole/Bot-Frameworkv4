@@ -16,15 +16,9 @@ namespace WhoIsWho.Recognizers
 
         public LuisRecognizerImpl(IConfiguration configuration)
         {
-
-            var luisApplication = new LuisApplication(
-                configuration[LuisConfigurationConstants.ApplicationId],
-                configuration[LuisConfigurationConstants.EndPointKey],
-                "https://" + configuration[LuisConfigurationConstants.EndPoint]);
-
             _recognizer =
                 new LuisRecognizer(
-                    "");
+                    "https://westeurope.api.cognitive.microsoft.com/luis/v2.0/apps/93c9b179-b142-4fc2-a41a-f96ef9a7033f?verbose=true&timezoneOffset=0&subscription-key=5161547ab4fe44a684f38f2b2b2c556a&q=");
         }
 
         public virtual async Task<RecognizerResult> RecognizeAsync(ITurnContext turnContext, CancellationToken cancellationToken)

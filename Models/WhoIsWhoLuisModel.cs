@@ -20,7 +20,8 @@ namespace WhoIsWho.Models
             Greeting,
             None,
             Preconstruction_Operations,
-            team_member
+            team_member, 
+            BankHoliday
         };
         [JsonProperty("intents")]
         public Dictionary<Intent, IntentScore> Intents;

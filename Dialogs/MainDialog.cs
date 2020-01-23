@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.Dialogs.Choices;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
 using WhoIsWho.Models;
@@ -16,14 +17,16 @@ namespace WhoIsWho.Dialogs
     {
         private readonly LuisRecognizerImpl _luisRecognizer;
 
-        public MainDialog(LuisRecognizerImpl luisRecognizer, ApplicationDialog applicationDialog, TeamMemberDialog teamMemberDialog) : base(nameof(MainDialog))
+        public MainDialog(LuisRecognizerImpl luisRecognizer, ApplicationDialog applicationDialog, TeamMemberDialog teamMemberDialog, BankHolidayDialog bankHolidayDialog) : base(nameof(MainDialog))
         {
             _luisRecognizer = luisRecognizer;
 
             AddDialog(new TextPrompt(nameof(TextPrompt)));
             AddDialog(new ChoicePrompt(nameof(ChoicePrompt)));
+            AddDialog(new DateTimePrompt(nameof(DateTimePrompt)));
             AddDialog(applicationDialog);
             AddDialog(teamMemberDialog);
+            AddDialog(bankHolidayDialog);
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
                 IntroStepAsync,
@@ -44,7 +47,8 @@ namespace WhoIsWho.Dialogs
             var choices = new List<Choice>
             {
                 new Choice("Find out which team someone works in"),
-                new Choice("Find out which team supports an application")
+                new Choice("Find out which team supports an application"),
+                new Choice("I'd like to know if a day is a bank holiday")
             };
 
             return await stepContext.PromptAsync(nameof(ChoicePrompt), new PromptOptions { Choices = choices, Style = ListStyle.HeroCard, Prompt = promptMessage },
@@ -63,6 +67,8 @@ namespace WhoIsWho.Dialogs
                     return await stepContext.BeginDialogAsync(nameof(ApplicationDialog), null, cancellationToken);
                 case WhoIsWhoLuisGenModel.Intent.team_member:
                     return await stepContext.BeginDialogAsync(nameof(TeamMemberDialog), null, cancellationToken);
+                case WhoIsWhoLuisGenModel.Intent.BankHoliday:
+                    return await stepContext.BeginDialogAsync(nameof(BankHolidayDialog), null, cancellationToken);
                 case WhoIsWhoLuisGenModel.Intent.None:
                 default:
                     var didntUnderstandMessageText =

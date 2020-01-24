@@ -40,7 +40,7 @@ namespace WhoIsWho.Dialogs
             CancellationToken cancellationToken)
         {
             var messageText = stepContext.Options?.ToString() ??
-                              "What can I help you with today?";
+                              $"What can I help you with today {stepContext.Context.Activity.From.Name}?";
 
             var promptMessage = MessageFactory.Text(messageText, messageText, InputHints.ExpectingInput);
 
